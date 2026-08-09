@@ -10,10 +10,11 @@ namespace SprintFlow.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
             builder.ToTable(DatabaseConstants.TablePrefix + "ApplicationUsers");
-            builder.HasOne(u => u.Tenant)
-                   .WithMany(t => t.Users)
-                   .HasForeignKey(u => u.TenantId)
-                   .OnDelete(DeleteBehavior.Restrict);
+            builder
+                .HasOne(u => u.Tenant)
+                .WithMany(t => t.Users)
+                .HasForeignKey(u => u.TenantId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

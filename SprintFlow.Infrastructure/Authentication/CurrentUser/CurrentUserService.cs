@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace SprintFlow.Infrastructure.Authentication.CurrentUser
 {
-    internal class CurrentUserService
-    {
-    }
+    internal class CurrentUserService { }
 }

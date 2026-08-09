@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace SprintFlow.Application.Common.Interfaces.Authentication
 {
-    internal interface ICurrentUserService
-    {
-    }
+    internal interface ICurrentUserService { }
 }

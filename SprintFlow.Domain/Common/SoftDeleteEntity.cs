@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace SprintFlow.Domain.Common
 {
-    internal class SoftDeleteEntity
-    {
-    }
+    internal class SoftDeleteEntity { }
 }

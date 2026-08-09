@@ -1,15 +1,13 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Diagnostics;
 
 namespace SprintFlow.API.Common.Exceptions
 {
-    public sealed class GlobalExceptionHandler
-        : IExceptionHandler
+    public sealed class GlobalExceptionHandler : IExceptionHandler
     {
         private readonly ILogger<GlobalExceptionHandler> _logger;
 
-        public GlobalExceptionHandler(
-            ILogger<GlobalExceptionHandler> logger)
+        public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
         {
             _logger = logger;
         }
@@ -17,29 +15,20 @@ namespace SprintFlow.API.Common.Exceptions
         public async ValueTask<bool> TryHandleAsync(
             HttpContext httpContext,
             Exception exception,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken
+        )
         {
-            _logger.LogError(
-                exception,
-                "Unhandled exception occurred.");
+            _logger.LogError(exception, "Unhandled exception occurred.");
 
             var response = new
             {
                 Success = false,
                 Error = exception switch
                 {
-                    AppException ex => new
-                    {
-                        Code = ex.ErrorCode,
-                        Message = ex.Message
-                    },
+                    AppException ex => new { Code = ex.ErrorCode, Message = ex.Message },
 
-                    _ => new
-                    {
-                        Code = "ServerError",
-                        Message = "An unexpected error occurred."
-                    }
-                }
+                    _ => new { Code = "ServerError", Message = "An unexpected error occurred." },
+                },
             };
 
             httpContext.Response.ContentType = "application/json";
@@ -47,12 +36,13 @@ namespace SprintFlow.API.Common.Exceptions
             httpContext.Response.StatusCode = exception switch
             {
                 AppException ex => ex.StatusCode,
-                _ => StatusCodes.Status500InternalServerError
+                _ => StatusCodes.Status500InternalServerError,
             };
 
             await httpContext.Response.WriteAsync(
                 JsonSerializer.Serialize(response),
-                cancellationToken);
+                cancellationToken
+            );
 
             return true;
         }

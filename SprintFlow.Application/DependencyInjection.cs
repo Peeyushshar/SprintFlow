@@ -1,7 +1,7 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using FluentValidation;
 using MediatR;
-using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SprintFlow.Application
 {

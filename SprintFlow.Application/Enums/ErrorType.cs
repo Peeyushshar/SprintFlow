@@ -7,6 +7,6 @@
         NotFound,
         Unauthorized,
         Forbidden,
-        Failure
+        Failure,
     }
 }

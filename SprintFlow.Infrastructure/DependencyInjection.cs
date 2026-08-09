@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +13,6 @@ using SprintFlow.Infrastructure.Initializers;
 using SprintFlow.Infrastructure.Persistence;
 using SprintFlow.Infrastructure.Persistence.Repositories;
 using SprintFlow.Infrastructure.Seed;
-using System.Text;
 
 namespace SprintFlow.Infrastructure;
 
@@ -20,17 +20,18 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        IConfiguration configuration)
+        IConfiguration configuration
+    )
     {
         // Database
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"));
+            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
         });
 
         services.AddScoped<IApplicationDbContext>(sp =>
-            sp.GetRequiredService<ApplicationDbContext>());
+            sp.GetRequiredService<ApplicationDbContext>()
+        );
 
         // Identity
         services
@@ -47,8 +48,7 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
         // JWT
-        services.Configure<JwtSettings>(
-            configuration.GetSection("Jwt"));
+        services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -66,8 +66,7 @@ public static class DependencyInjection
                     ValidIssuer = jwt!.Issuer,
                     ValidAudience = jwt.Audience,
 
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(jwt.Secret))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Secret)),
                 };
             });
 

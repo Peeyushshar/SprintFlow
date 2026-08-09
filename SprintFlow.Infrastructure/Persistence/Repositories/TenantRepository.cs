@@ -20,26 +20,22 @@ namespace SprintFlow.Infrastructure.Persistence.Repositories
 
         public async Task<bool> ExistsBySlugAsync(string slug)
         {
-            return await _context.Tenants
-                .AnyAsync(t => t.Slug == slug);
+            return await _context.Tenants.AnyAsync(t => t.Slug == slug);
         }
 
         public async Task<bool> ExistsByNameAsync(string name)
         {
-            return await _context.Tenants
-                .AnyAsync(t => t.Name == name);
+            return await _context.Tenants.AnyAsync(t => t.Name == name);
         }
 
         public async Task<Tenant?> GetByIdAsync(Guid id)
         {
-            return await _context.Tenants
-                .FirstOrDefaultAsync(t => t.Id == id);
+            return await _context.Tenants.FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<Tenant?> GetBySlugAsync(string slug)
         {
-            return await _context.Tenants
-                .FirstOrDefaultAsync(t => t.Slug == slug);
+            return await _context.Tenants.FirstOrDefaultAsync(t => t.Slug == slug);
         }
 
         public void Update(Tenant entity)

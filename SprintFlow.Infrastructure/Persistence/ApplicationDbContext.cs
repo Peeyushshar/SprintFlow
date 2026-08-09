@@ -8,24 +8,19 @@ namespace SprintFlow.Infrastructure.Persistence;
 
 public class ApplicationDbContext
     : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>,
-      IApplicationDbContext
+        IApplicationDbContext
 {
-    public ApplicationDbContext(
-        DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options) { }
 
     public DbSet<Tenant> Tenants => Set<Tenant>();
-    public DbSet<RefreshToken> RefreshTokens =>
-    Set<RefreshToken>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<ApplicationUser> ApplicationUsers => Set<ApplicationUser>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(
-            typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 }

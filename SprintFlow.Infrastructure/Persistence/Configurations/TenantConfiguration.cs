@@ -10,8 +10,7 @@ namespace SprintFlow.Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Tenant> builder)
         {
             builder.ToTable(DatabaseConstants.TablePrefix + "Tenants");
-            builder.HasIndex(t => t.Slug)
-                   .IsUnique();
+            builder.HasIndex(t => t.Slug).IsUnique();
         }
     }
 }

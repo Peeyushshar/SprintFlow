@@ -13,29 +13,24 @@ namespace SprintFlow.Infrastructure.Persistence
             _context = context;
         }
 
-        public async Task BeginTransactionAsync(
-            CancellationToken cancellationToken = default)
+        public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            _transaction = await _context.Database
-                .BeginTransactionAsync(cancellationToken);
+            _transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         }
 
-        public async Task CommitTransactionAsync(
-            CancellationToken cancellationToken = default)
+        public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
                 await _transaction.CommitAsync(cancellationToken);
         }
 
-        public async Task RollbackTransactionAsync(
-            CancellationToken cancellationToken = default)
+        public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
             if (_transaction != null)
                 await _transaction.RollbackAsync(cancellationToken);
         }
 
-        public async Task<int> SaveChangesAsync(
-            CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return await _context.SaveChangesAsync(cancellationToken);
         }

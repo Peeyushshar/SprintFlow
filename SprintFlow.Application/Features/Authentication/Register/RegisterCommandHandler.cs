@@ -11,8 +11,7 @@ using SprintFlow.Domain.Entities;
 
 namespace SprintFlow.Application.Features.Authentication.Register
 {
-    public class RegisterCommandHandler
-     : IRequestHandler<RegisterCommand, Result<RegisterResponse>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterResponse>>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITenantRepository _tenantRepository;
@@ -24,7 +23,8 @@ namespace SprintFlow.Application.Features.Authentication.Register
             ITenantRepository tenantRepository,
             IJwtTokenGenerator jwtTokenGenerator,
             IUnitOfWork unitOfWork,
-            ILogger<RegisterCommandHandler> logger)
+            ILogger<RegisterCommandHandler> logger
+        )
         {
             _userManager = userManager;
             _tenantRepository = tenantRepository;
@@ -33,24 +33,22 @@ namespace SprintFlow.Application.Features.Authentication.Register
         }
 
         public async Task<Result<RegisterResponse>> Handle(
-     RegisterCommand request,
-     CancellationToken cancellationToken)
+            RegisterCommand request,
+            CancellationToken cancellationToken
+        )
         {
             // Check Company Slug
             if (await _tenantRepository.ExistsBySlugAsync(request.CompanySlug))
             {
-                return Result<RegisterResponse>.Failure(
-                    TenantErrors.SlugAlreadyExists);
+                return Result<RegisterResponse>.Failure(TenantErrors.SlugAlreadyExists);
             }
 
             // Check Email
-            var existingUser =
-                await _userManager.FindByEmailAsync(request.Email);
+            var existingUser = await _userManager.FindByEmailAsync(request.Email);
 
             if (existingUser != null)
             {
-                return Result<RegisterResponse>.Failure(
-                    AuthErrors.EmailAlreadyExists);
+                return Result<RegisterResponse>.Failure(AuthErrors.EmailAlreadyExists);
             }
 
             await _unitOfWork.BeginTransactionAsync(cancellationToken);
@@ -65,7 +63,7 @@ namespace SprintFlow.Application.Features.Authentication.Register
                 {
                     Id = Guid.NewGuid(),
                     Name = request.CompanyName,
-                    Slug = request.CompanySlug
+                    Slug = request.CompanySlug,
                 };
 
                 await _tenantRepository.AddAsync(tenant);
@@ -82,11 +80,10 @@ namespace SprintFlow.Application.Features.Authentication.Register
                     Email = request.Email,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
-                    EmailConfirmed = false
+                    EmailConfirmed = false,
                 };
 
-                var createUserResult =
-                    await _userManager.CreateAsync(user, request.Password);
+                var createUserResult = await _userManager.CreateAsync(user, request.Password);
 
                 if (!createUserResult.Succeeded)
                 {
@@ -94,12 +91,12 @@ namespace SprintFlow.Application.Features.Authentication.Register
 
                     var message = string.Join(
                         ", ",
-                        createUserResult.Errors.Select(e => e.Description));
+                        createUserResult.Errors.Select(e => e.Description)
+                    );
 
                     return Result<RegisterResponse>.Failure(
-                        new Error(
-                            ErrorCodes.UserCreationFailed,
-                            message, ErrorType.Failure));
+                        new Error(ErrorCodes.UserCreationFailed, message, ErrorType.Failure)
+                    );
                 }
 
                 //-------------------------------------------------
@@ -127,20 +124,22 @@ namespace SprintFlow.Application.Features.Authentication.Register
                         TenantId = tenant.Id,
                         Email = request.Email,
                         Role = Roles.Owner,
-                    });
+                    }
+                );
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,
-                    "Registration failed for {Email}",
-                    request.Email);
+                _logger.LogError(ex, "Registration failed for {Email}", request.Email);
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
                 return Result<RegisterResponse>.Failure(
                     new Error(
                         ErrorCodes.Unexpected,
-                        "Unexpected server error.", ErrorType.Forbidden));
+                        "Unexpected server error.",
+                        ErrorType.Forbidden
+                    )
+                );
             }
         }
     }
