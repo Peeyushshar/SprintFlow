@@ -3,7 +3,7 @@
 namespace SprintFlow.Application.Common.Interfaces.Persistence
 {
     public interface IRepository<TEntity>
-    where TEntity : BaseEntity
+        where TEntity : BaseEntity
     {
         Task<TEntity?> GetByIdAsync(Guid id);
 

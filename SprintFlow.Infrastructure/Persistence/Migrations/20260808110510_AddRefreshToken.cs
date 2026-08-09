@@ -13,59 +13,60 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                table: "AspNetUserClaims");
+                table: "AspNetUserClaims"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                table: "AspNetUserLogins");
+                table: "AspNetUserLogins"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                table: "AspNetUserRoles");
+                table: "AspNetUserRoles"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUsers_Tenants_TenantId",
-                table: "AspNetUsers");
+                table: "AspNetUsers"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                table: "AspNetUserTokens");
+                table: "AspNetUserTokens"
+            );
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_Tenants",
-                table: "Tenants");
+            migrationBuilder.DropPrimaryKey(name: "PK_Tenants", table: "Tenants");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_AspNetUsers",
-                table: "AspNetUsers");
+            migrationBuilder.DropPrimaryKey(name: "PK_AspNetUsers", table: "AspNetUsers");
 
-            migrationBuilder.RenameTable(
-                name: "Tenants",
-                newName: "AppTenants");
+            migrationBuilder.RenameTable(name: "Tenants", newName: "AppTenants");
 
-            migrationBuilder.RenameTable(
-                name: "AspNetUsers",
-                newName: "AppApplicationUsers");
+            migrationBuilder.RenameTable(name: "AspNetUsers", newName: "AppApplicationUsers");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Tenants_Slug",
                 table: "AppTenants",
-                newName: "IX_AppTenants_Slug");
+                newName: "IX_AppTenants_Slug"
+            );
 
             migrationBuilder.RenameIndex(
                 name: "IX_AspNetUsers_TenantId",
                 table: "AppApplicationUsers",
-                newName: "IX_AppApplicationUsers_TenantId");
+                newName: "IX_AppApplicationUsers_TenantId"
+            );
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AppTenants",
                 table: "AppTenants",
-                column: "Id");
+                column: "Id"
+            );
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AppApplicationUsers",
                 table: "AppApplicationUsers",
-                column: "Id");
+                column: "Id"
+            );
 
             migrationBuilder.CreateTable(
                 name: "AppRefreshTokens",
@@ -73,11 +74,18 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TokenHash = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    TokenHash = table.Column<string>(
+                        type: "nvarchar(128)",
+                        maxLength: 128,
+                        nullable: false
+                    ),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     RevokedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApplicationUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ApplicationUserId = table.Column<Guid>(
+                        type: "uniqueidentifier",
+                        nullable: true
+                    ),
                 },
                 constraints: table =>
                 {
@@ -86,30 +94,36 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                         name: "FK_AppRefreshTokens_AppApplicationUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
                         principalTable: "AppApplicationUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id"
+                    );
                     table.ForeignKey(
                         name: "FK_AppRefreshTokens_AppApplicationUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AppApplicationUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppRefreshTokens_ApplicationUserId",
                 table: "AppRefreshTokens",
-                column: "ApplicationUserId");
+                column: "ApplicationUserId"
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppRefreshTokens_TokenHash",
                 table: "AppRefreshTokens",
                 column: "TokenHash",
-                unique: true);
+                unique: true
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppRefreshTokens_UserId",
                 table: "AppRefreshTokens",
-                column: "UserId");
+                column: "UserId"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AppApplicationUsers_AppTenants_TenantId",
@@ -117,7 +131,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "TenantId",
                 principalTable: "AppTenants",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Restrict
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AppApplicationUsers_UserId",
@@ -125,7 +140,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AppApplicationUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserLogins_AppApplicationUsers_UserId",
@@ -133,7 +149,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AppApplicationUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AppApplicationUsers_UserId",
@@ -141,7 +158,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AppApplicationUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserTokens_AppApplicationUsers_UserId",
@@ -149,7 +167,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AppApplicationUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
         }
 
         /// <inheritdoc />
@@ -157,62 +176,61 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_AppApplicationUsers_AppTenants_TenantId",
-                table: "AppApplicationUsers");
+                table: "AppApplicationUsers"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserClaims_AppApplicationUsers_UserId",
-                table: "AspNetUserClaims");
+                table: "AspNetUserClaims"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserLogins_AppApplicationUsers_UserId",
-                table: "AspNetUserLogins");
+                table: "AspNetUserLogins"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserRoles_AppApplicationUsers_UserId",
-                table: "AspNetUserRoles");
+                table: "AspNetUserRoles"
+            );
 
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserTokens_AppApplicationUsers_UserId",
-                table: "AspNetUserTokens");
+                table: "AspNetUserTokens"
+            );
 
-            migrationBuilder.DropTable(
-                name: "AppRefreshTokens");
+            migrationBuilder.DropTable(name: "AppRefreshTokens");
 
-            migrationBuilder.DropPrimaryKey(
-                name: "PK_AppTenants",
-                table: "AppTenants");
+            migrationBuilder.DropPrimaryKey(name: "PK_AppTenants", table: "AppTenants");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_AppApplicationUsers",
-                table: "AppApplicationUsers");
+                table: "AppApplicationUsers"
+            );
 
-            migrationBuilder.RenameTable(
-                name: "AppTenants",
-                newName: "Tenants");
+            migrationBuilder.RenameTable(name: "AppTenants", newName: "Tenants");
 
-            migrationBuilder.RenameTable(
-                name: "AppApplicationUsers",
-                newName: "AspNetUsers");
+            migrationBuilder.RenameTable(name: "AppApplicationUsers", newName: "AspNetUsers");
 
             migrationBuilder.RenameIndex(
                 name: "IX_AppTenants_Slug",
                 table: "Tenants",
-                newName: "IX_Tenants_Slug");
+                newName: "IX_Tenants_Slug"
+            );
 
             migrationBuilder.RenameIndex(
                 name: "IX_AppApplicationUsers_TenantId",
                 table: "AspNetUsers",
-                newName: "IX_AspNetUsers_TenantId");
+                newName: "IX_AspNetUsers_TenantId"
+            );
 
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Tenants",
-                table: "Tenants",
-                column: "Id");
+            migrationBuilder.AddPrimaryKey(name: "PK_Tenants", table: "Tenants", column: "Id");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_AspNetUsers",
                 table: "AspNetUsers",
-                column: "Id");
+                column: "Id"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserClaims_AspNetUsers_UserId",
@@ -220,7 +238,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserLogins_AspNetUsers_UserId",
@@ -228,7 +247,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserRoles_AspNetUsers_UserId",
@@ -236,7 +256,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUsers_Tenants_TenantId",
@@ -244,7 +265,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "TenantId",
                 principalTable: "Tenants",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+                onDelete: ReferentialAction.Restrict
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
@@ -252,7 +274,8 @@ namespace SprintFlow.Infrastructure.Persistence.Migrations
                 column: "UserId",
                 principalTable: "AspNetUsers",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade
+            );
         }
     }
 }

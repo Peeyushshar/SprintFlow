@@ -11,9 +11,7 @@ using SprintFlow.Domain.Entities;
 namespace SprintFlow.Application.Features.Authentication.RefreshToken
 {
     public class RefreshTokenCommandHandler
-        : IRequestHandler<
-            RefreshTokenCommand,
-            Result<RefreshTokenResponse>>
+        : IRequestHandler<RefreshTokenCommand, Result<RefreshTokenResponse>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
@@ -22,7 +20,8 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
         public RefreshTokenCommandHandler(
             IRefreshTokenRepository refreshTokenRepository,
             IJwtTokenGenerator jwtTokenGenerator,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork
+        )
         {
             _refreshTokenRepository = refreshTokenRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
@@ -31,28 +30,27 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
 
         public async Task<Result<RefreshTokenResponse>> Handle(
             RefreshTokenCommand request,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken
+        )
         {
             //-------------------------------------------------
             // Hash supplied refresh token
             //-------------------------------------------------
 
-            var tokenHash =
-                TokenHasher.Hash(request.RefreshToken);
+            var tokenHash = TokenHasher.Hash(request.RefreshToken);
 
             //-------------------------------------------------
             // Find stored refresh token
             //-------------------------------------------------
 
-            var storedToken =
-                await _refreshTokenRepository.GetByTokenAsync(
-                    tokenHash,
-                    cancellationToken);
+            var storedToken = await _refreshTokenRepository.GetByTokenAsync(
+                tokenHash,
+                cancellationToken
+            );
 
             if (storedToken is null)
             {
-                return Result<RefreshTokenResponse>.Failure(
-                    AuthErrors.InvalidRefreshToken);
+                return Result<RefreshTokenResponse>.Failure(AuthErrors.InvalidRefreshToken);
             }
 
             //-------------------------------------------------
@@ -61,14 +59,12 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
 
             if (storedToken.IsRevoked)
             {
-                return Result<RefreshTokenResponse>.Failure(
-                    AuthErrors.RefreshTokenRevoked);
+                return Result<RefreshTokenResponse>.Failure(AuthErrors.RefreshTokenRevoked);
             }
 
             if (storedToken.ExpiresAt <= DateTime.UtcNow)
             {
-                return Result<RefreshTokenResponse>.Failure(
-                    AuthErrors.RefreshTokenExpired);
+                return Result<RefreshTokenResponse>.Failure(AuthErrors.RefreshTokenExpired);
             }
 
             //-------------------------------------------------
@@ -79,29 +75,25 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
 
             if (user is null)
             {
-                return Result<RefreshTokenResponse>.Failure(
-                    AuthErrors.InvalidRefreshToken);
+                return Result<RefreshTokenResponse>.Failure(AuthErrors.InvalidRefreshToken);
             }
 
             if (!user.IsActive)
             {
-                return Result<RefreshTokenResponse>.Failure(
-                    AuthErrors.InactiveUser);
+                return Result<RefreshTokenResponse>.Failure(AuthErrors.InactiveUser);
             }
 
             //-------------------------------------------------
             // Generate new access token
             //-------------------------------------------------
 
-            var accessToken =
-                await _jwtTokenGenerator.GenerateAccessToken(user);
+            var accessToken = await _jwtTokenGenerator.GenerateAccessToken(user);
 
             //-------------------------------------------------
             // Generate new refresh token
             //-------------------------------------------------
 
-            var newRefreshToken =
-                _jwtTokenGenerator.GenerateRefreshToken();
+            var newRefreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
             //-------------------------------------------------
             // Revoke old refresh token
@@ -113,38 +105,30 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
             // Create new refresh token entity
             //-------------------------------------------------
 
-            var newRefreshTokenEntity =
-                new Domain.Entities.RefreshToken
-                {
-                    Id = Guid.NewGuid(),
+            var newRefreshTokenEntity = new Domain.Entities.RefreshToken
+            {
+                Id = Guid.NewGuid(),
 
-                    UserId = user.Id,
+                UserId = user.Id,
 
-                    TokenHash =
-                        TokenHasher.Hash(newRefreshToken),
+                TokenHash = TokenHasher.Hash(newRefreshToken),
 
-                    CreatedAt =
-                        DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
 
-                    ExpiresAt =
-                        _jwtTokenGenerator
-                            .GetRefreshTokenExpiry()
-                };
+                ExpiresAt = _jwtTokenGenerator.GetRefreshTokenExpiry(),
+            };
 
             //-------------------------------------------------
             // Store new refresh token
             //-------------------------------------------------
 
-            await _refreshTokenRepository.AddAsync(
-                newRefreshTokenEntity,
-                cancellationToken);
+            await _refreshTokenRepository.AddAsync(newRefreshTokenEntity, cancellationToken);
 
             //-------------------------------------------------
             // Save changes
             //-------------------------------------------------
 
-            await _unitOfWork.SaveChangesAsync(
-                cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             //-------------------------------------------------
             // Response
@@ -162,9 +146,9 @@ namespace SprintFlow.Application.Features.Authentication.RefreshToken
                     // Return RAW token to client
                     RefreshToken = newRefreshToken,
 
-                    ExpiresAt =
-                        _jwtTokenGenerator.GetAccessTokenExpiry()
-                });
+                    ExpiresAt = _jwtTokenGenerator.GetAccessTokenExpiry(),
+                }
+            );
         }
     }
 }

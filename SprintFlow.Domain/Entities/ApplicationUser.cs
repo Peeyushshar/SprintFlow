@@ -21,6 +21,5 @@ public class ApplicationUser : IdentityUser<Guid>
     public Guid? UpdatedBy { get; set; }
 
     public Tenant? Tenant { get; set; } = null!;
-    public ICollection<RefreshToken> RefreshTokens { get; set; }
-        = new List<RefreshToken>();
+    public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 }

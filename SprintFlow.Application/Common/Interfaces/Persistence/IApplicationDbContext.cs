@@ -2,6 +2,5 @@
 
 public interface IApplicationDbContext
 {
-    Task<int> SaveChangesAsync(
-        CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

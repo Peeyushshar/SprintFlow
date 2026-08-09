@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SprintFlow.API.Common.Extensions;
 using SprintFlow.Application.Features.Authentication.Login;
+using SprintFlow.Application.Features.Authentication.Logout;
 using SprintFlow.Application.Features.Authentication.RefreshToken;
 using SprintFlow.Application.Features.Authentication.Register;
 
@@ -50,6 +51,22 @@ namespace SprintFlow.API.Controllers
             }
 
             return Ok(result.Value);
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(
+            LogoutCommand command,
+            CancellationToken cancellationToken
+        )
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                return Unauthorized(result.Error);
+            }
+
+            return NoContent();
         }
     }
 }

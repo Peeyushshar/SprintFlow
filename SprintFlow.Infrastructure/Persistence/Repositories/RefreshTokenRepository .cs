@@ -15,27 +15,26 @@ namespace SprintFlow.Infrastructure.Persistence.Repositories
 
         public async Task AddAsync(
             RefreshToken refreshToken,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default
+        )
         {
-            await _context.RefreshTokens.AddAsync(
-                refreshToken,
-                cancellationToken);
+            await _context.RefreshTokens.AddAsync(refreshToken, cancellationToken);
         }
 
         public async Task<RefreshToken?> GetByTokenAsync(
             string token,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default
+        )
         {
-            return await _context.RefreshTokens
-                .Include(x => x.User)
-                .FirstOrDefaultAsync(
-                    x => x.TokenHash == token,
-                    cancellationToken);
+            return await _context
+                .RefreshTokens.Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.TokenHash == token, cancellationToken);
         }
 
         public Task RevokeAsync(
             RefreshToken refreshToken,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default
+        )
         {
             refreshToken.RevokedAt = DateTime.UtcNow;
 

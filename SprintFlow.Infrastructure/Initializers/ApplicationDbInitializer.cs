@@ -11,7 +11,8 @@ namespace SprintFlow.Infrastructure.Initializers
 
         public ApplicationDbInitializer(
             ApplicationDbContext context,
-            IEnumerable<IDataSeeder> seeders)
+            IEnumerable<IDataSeeder> seeders
+        )
         {
             _context = context;
             _seeders = seeders;

@@ -18,10 +18,7 @@ namespace SprintFlow.Infrastructure.Seed
             {
                 if (!await _roleManager.RoleExistsAsync(role))
                 {
-                    await _roleManager.CreateAsync(new IdentityRole<Guid>
-                    {
-                        Name = role
-                    });
+                    await _roleManager.CreateAsync(new IdentityRole<Guid> { Name = role });
                 }
             }
         }

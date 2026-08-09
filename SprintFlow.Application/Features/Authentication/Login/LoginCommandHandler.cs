@@ -17,23 +17,26 @@ namespace SprintFlow.Application.Features.Authentication.Login
         private readonly ILogger<LoginCommandHandler> _logger;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
         private readonly IUnitOfWork _unitOfWork;
+
         public LoginCommandHandler(
             UserManager<ApplicationUser> userManager,
             IJwtTokenGenerator jwtTokenGenerator,
             IRefreshTokenRepository refreshTokenRepository,
             ILogger<LoginCommandHandler> logger,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork
+        )
         {
             _userManager = userManager;
             _jwtTokenGenerator = jwtTokenGenerator;
             _refreshTokenRepository = refreshTokenRepository;
             _logger = logger;
-            _unitOfWork = unitOfWork;   
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<Result<LoginResponse>> Handle(
             LoginCommand request,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken
+        )
         {
             //-------------------------------------------------
             // Find user
@@ -43,12 +46,9 @@ namespace SprintFlow.Application.Features.Authentication.Login
 
             if (user is null)
             {
-                _logger.LogWarning(
-                    "Login failed. User not found for email {Email}",
-                    request.Email);
+                _logger.LogWarning("Login failed. User not found for email {Email}", request.Email);
 
-                return Result<LoginResponse>.Failure(
-                    AuthErrors.InvalidCredentials);
+                return Result<LoginResponse>.Failure(AuthErrors.InvalidCredentials);
             }
 
             //-------------------------------------------------
@@ -57,48 +57,39 @@ namespace SprintFlow.Application.Features.Authentication.Login
 
             if (!user.IsActive)
             {
-                return Result<LoginResponse>.Failure(
-                    AuthErrors.InactiveUser);
+                return Result<LoginResponse>.Failure(AuthErrors.InactiveUser);
             }
 
             //-------------------------------------------------
             // Check password
             //-------------------------------------------------
 
-            var passwordValid = await _userManager.CheckPasswordAsync(
-                user,
-                request.Password);
+            var passwordValid = await _userManager.CheckPasswordAsync(user, request.Password);
 
             if (!passwordValid)
             {
-                _logger.LogWarning(
-                    "Login failed. Invalid password for user {UserId}",
-                    user.Id);
+                _logger.LogWarning("Login failed. Invalid password for user {UserId}", user.Id);
 
-                return Result<LoginResponse>.Failure(
-                    AuthErrors.InvalidCredentials);
+                return Result<LoginResponse>.Failure(AuthErrors.InvalidCredentials);
             }
 
             //-------------------------------------------------
             // Generate Access Token
             //-------------------------------------------------
 
-            var accessToken =
-                await _jwtTokenGenerator.GenerateAccessToken(user);
+            var accessToken = await _jwtTokenGenerator.GenerateAccessToken(user);
 
             //-------------------------------------------------
             // Generate Refresh Token
             //-------------------------------------------------
 
-            var refreshToken =
-                _jwtTokenGenerator.GenerateRefreshToken();
+            var refreshToken = _jwtTokenGenerator.GenerateRefreshToken();
 
             //-------------------------------------------------
             // Get Access Token expiry
             //-------------------------------------------------
 
-            var expiresAt =
-                _jwtTokenGenerator.GetAccessTokenExpiry();
+            var expiresAt = _jwtTokenGenerator.GetAccessTokenExpiry();
 
             //-------------------------------------------------
             // Create Refresh Token Entity
@@ -115,20 +106,16 @@ namespace SprintFlow.Application.Features.Authentication.Login
 
                 CreatedAt = DateTime.UtcNow,
 
-                ExpiresAt =
-                    _jwtTokenGenerator.GetRefreshTokenExpiry()
+                ExpiresAt = _jwtTokenGenerator.GetRefreshTokenExpiry(),
             };
 
             //-------------------------------------------------
             // Save Refresh Token
             //-------------------------------------------------
 
-            await _refreshTokenRepository.AddAsync(
-                refreshTokenEntity,
-                cancellationToken);
+            await _refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
 
-            await _unitOfWork.SaveChangesAsync(
-                cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             //-------------------------------------------------
             // Response
@@ -141,8 +128,9 @@ namespace SprintFlow.Application.Features.Authentication.Login
                     TenantId = user.TenantId!.Value,
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
-                    ExpiresAt = expiresAt
-                });
+                    ExpiresAt = expiresAt,
+                }
+            );
         }
     }
 }

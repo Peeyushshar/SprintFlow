@@ -6,14 +6,9 @@ namespace SprintFlow.Application.Features.Authentication.Login
     {
         public LoginCommandValidator()
         {
-            RuleFor(x => x.Email)
-                .NotEmpty()
-                .EmailAddress()
-                .MaximumLength(256);
+            RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(256);
 
-            RuleFor(x => x.Password)
-                .NotEmpty()
-                .MinimumLength(8);
+            RuleFor(x => x.Password).NotEmpty().MinimumLength(8);
         }
     }
 }

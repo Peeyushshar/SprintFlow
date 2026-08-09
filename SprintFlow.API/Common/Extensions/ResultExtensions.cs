@@ -23,10 +23,10 @@ namespace SprintFlow.API.Common.Extensions
 
                 ErrorType.Forbidden => new ObjectResult(result.Error)
                 {
-                    StatusCode = StatusCodes.Status403Forbidden
+                    StatusCode = StatusCodes.Status403Forbidden,
                 },
 
-                _ => new BadRequestObjectResult(result.Error)
+                _ => new BadRequestObjectResult(result.Error),
             };
         }
     }

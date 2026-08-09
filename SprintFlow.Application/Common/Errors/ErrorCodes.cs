@@ -8,9 +8,11 @@
         public const string RoleNotFound = "AUTH_002";
         public const string UserCreationFailed = "AUTH_003";
         public const string Unexpected = "SYS_500";
+
         //Login
         public const string InvalidCredentials = "AUTH_004";
         public const string InactiveUser = "AUTH_005";
+
         //RefreshToken
         public const string InvalidRefreshToken = "AUTH_006";
         public const string RefreshTokenRevoked = "AUTH_007";

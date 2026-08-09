@@ -11,10 +11,10 @@
         public static readonly IReadOnlyList<string> All =
         [
             Owner,
-        Admin,
-        ProjectManager,
-        Developer,
-        Viewer
+            Admin,
+            ProjectManager,
+            Developer,
+            Viewer,
         ];
     }
 }

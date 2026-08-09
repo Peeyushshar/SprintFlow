@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace SprintFlow.Infrastructure.Authentication.Identity
 {
-    internal class IdentityService
-    {
-    }
+    internal class IdentityService { }
 }

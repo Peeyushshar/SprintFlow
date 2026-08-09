@@ -3,8 +3,7 @@ using SprintFlow.Application.Common.Models;
 
 namespace SprintFlow.Application.Features.Authentication.Register
 {
-    public sealed class RegisterCommand
-    : IRequest<Result<RegisterResponse>>
+    public sealed class RegisterCommand : IRequest<Result<RegisterResponse>>
     {
         public string CompanyName { get; set; } = string.Empty;
 

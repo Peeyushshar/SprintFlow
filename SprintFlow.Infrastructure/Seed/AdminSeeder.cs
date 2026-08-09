@@ -40,24 +40,22 @@ namespace SprintFlow.Infrastructure.Seed
             {
                 var errors = string.Join(
                     ", ",
-                    result.Errors.Select(e => $"{e.Code}: {e.Description}"));
+                    result.Errors.Select(e => $"{e.Code}: {e.Description}")
+                );
 
-                throw new InvalidOperationException(
-                    $"Failed to create platform admin: {errors}");
+                throw new InvalidOperationException($"Failed to create platform admin: {errors}");
             }
 
-            var roleResult = await _userManager.AddToRoleAsync(
-                admin,
-                Roles.Admin);
+            var roleResult = await _userManager.AddToRoleAsync(admin, Roles.Admin);
 
             if (!roleResult.Succeeded)
             {
                 var errors = string.Join(
                     ", ",
-                    roleResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
+                    roleResult.Errors.Select(e => $"{e.Code}: {e.Description}")
+                );
 
-                throw new InvalidOperationException(
-                    $"Failed to assign Admin role: {errors}");
+                throw new InvalidOperationException($"Failed to assign Admin role: {errors}");
             }
         }
     }

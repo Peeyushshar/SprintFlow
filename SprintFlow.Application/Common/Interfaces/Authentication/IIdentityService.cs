@@ -8,7 +8,8 @@ namespace SprintFlow.Application.Common.Interfaces.Authentication
 
         Task<(bool Succeeded, Guid UserId, IEnumerable<string> Errors)> CreateUserAsync(
             ApplicationUser user,
-            string password);
+            string password
+        );
 
         Task AddToRoleAsync(Guid userId, string role);
 
