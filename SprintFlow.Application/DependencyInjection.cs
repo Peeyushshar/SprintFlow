@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using FluentValidation;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using SprintFlow.Application.Common.Behaviors;
 
 namespace SprintFlow.Application
 {
@@ -15,13 +15,17 @@ namespace SprintFlow.Application
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(assembly);
+
+                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+
+                cfg.AddOpenBehavior(typeof(UnitOfWorkBehavior<,>));
             });
 
             // FluentValidation (We'll use this next)
             services.AddValidatorsFromAssembly(assembly);
 
             // AutoMapper (Later)
-            // services.AddAutoMapper(assembly);
+            services.AddAutoMapper(cfg => { }, assembly);
 
             return services;
         }

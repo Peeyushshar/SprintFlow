@@ -125,7 +125,7 @@ namespace SprintFlow.Application.Features.Authentication.Login
                 new LoginResponse
                 {
                     UserId = user.Id,
-                    TenantId = user.TenantId!.Value,
+                    TenantId = user.TenantId,
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
                     ExpiresAt = expiresAt,

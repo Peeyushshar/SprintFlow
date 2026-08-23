@@ -5,14 +5,14 @@ namespace SprintFlow.Application.Common.Interfaces.Persistence
     public interface IRepository<TEntity>
         where TEntity : BaseEntity
     {
-        Task<TEntity?> GetByIdAsync(Guid id);
+        Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task AddAsync(TEntity entity);
+        Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-        void Update(TEntity entity);
+        Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-        void Remove(TEntity entity);
+        Task DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
 
-        IQueryable<TEntity> Query();
+        IQueryable<TEntity> GetAll();
     }
 }

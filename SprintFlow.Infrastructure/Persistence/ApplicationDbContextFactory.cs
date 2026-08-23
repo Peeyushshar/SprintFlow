@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using SprintFlow.Infrastructure.MultiTenancy;
 
 namespace SprintFlow.Infrastructure.Persistence;
 
@@ -28,6 +29,10 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 
         optionsBuilder.UseSqlServer(connectionString);
 
-        return new ApplicationDbContext(optionsBuilder.Options);
+        return new ApplicationDbContext(
+            optionsBuilder.Options,
+            new DesignTimeCurrentTenant(),
+            new DesignTimeCurrentUserService()
+        );
     }
 }

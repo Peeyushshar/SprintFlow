@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SprintFlow.API.Common.Extensions;
 using SprintFlow.Application.Features.Authentication.Login;
 using SprintFlow.Application.Features.Authentication.Logout;
 using SprintFlow.Application.Features.Authentication.RefreshToken;
-using SprintFlow.Application.Features.Authentication.Register;
 
 namespace SprintFlow.API.Controllers
 {
@@ -17,14 +15,6 @@ namespace SprintFlow.API.Controllers
         public AuthController(ISender mediator)
         {
             _mediator = mediator;
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterCommand command)
-        {
-            var result = await _mediator.Send(command);
-
-            return result.ToActionResult();
         }
 
         [HttpPost("login")]
