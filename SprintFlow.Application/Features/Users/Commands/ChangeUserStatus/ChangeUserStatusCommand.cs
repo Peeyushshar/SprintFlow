@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SprintFlow.Application.Common.Interfaces.CQRS;
+using SprintFlow.Application.Common.Models;
 
 namespace SprintFlow.Application.Features.Users.Commands.ChangeUserStatus
 {
-    internal class ChangeUserStatusCommand
-    {
-    }
+    public record ChangeUserStatusCommand(Guid UserId, bool IsActive)
+        : ICommand<Result<ChangeUserStatusResponse>>;
 }

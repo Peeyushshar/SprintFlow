@@ -10,5 +10,11 @@ namespace SprintFlow.Application.Common.Errors
             "Entity does not exists.",
             ErrorType.NotFound
         );
+
+        public static readonly Error TenantRequired = new(
+            ErrorCodes.TenantIdRequiredCode,
+            ErrorCodes.TenantIdRequiredMessage,
+            ErrorType.Failure
+        );
     }
 }

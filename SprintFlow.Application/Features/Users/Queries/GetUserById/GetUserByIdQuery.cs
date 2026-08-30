@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediatR;
+using SprintFlow.Application.Common.Models;
 
 namespace SprintFlow.Application.Features.Users.Queries.GetUserById
 {
-    internal class GetUserByIdQuery
-    {
-    }
+    public record GetUserByIdQuery(Guid UserId) : IRequest<Result<GetUsersResponse>>;
 }
