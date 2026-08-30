@@ -20,14 +20,22 @@ namespace SprintFlow.Infrastructure.Persistence
 
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_transaction != null)
-                await _transaction.CommitAsync(cancellationToken);
+            if (_transaction is null)
+                return;
+
+            await _transaction.CommitAsync(cancellationToken);
+            await _transaction.DisposeAsync();
+            _transaction = null;
         }
 
         public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_transaction != null)
-                await _transaction.RollbackAsync(cancellationToken);
+            if (_transaction is null)
+                return;
+
+            await _transaction.RollbackAsync(cancellationToken);
+            await _transaction.DisposeAsync();
+            _transaction = null;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

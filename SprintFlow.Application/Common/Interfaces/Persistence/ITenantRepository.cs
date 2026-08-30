@@ -4,10 +4,10 @@ namespace SprintFlow.Application.Common.Interfaces.Persistence
 {
     public interface ITenantRepository : IRepository<Tenant>
     {
-        Task<bool> ExistsBySlugAsync(string slug);
+        Task<bool> ExistsBySlugAsync(string slug, CancellationToken cancellationToken = default);
 
-        Task<bool> ExistsByNameAsync(string name);
-
-        Task<Tenant?> GetBySlugAsync(string slug);
+        Task<IReadOnlyList<Tenant>> GetAllTenantsAsync(
+            CancellationToken cancellationToken = default
+        );
     }
 }

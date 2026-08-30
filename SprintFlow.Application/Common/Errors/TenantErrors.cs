@@ -9,5 +9,11 @@ namespace SprintFlow.Application.Common.Errors
             "Company slug already exists.",
             Enums.ErrorType.Conflict
         );
+
+        public static readonly Error OwnerEmailAlreadyExists = new(
+            ErrorCodes.OwnerEmailAlreadyExists,
+            "Owner email already exists.",
+            Enums.ErrorType.Conflict
+        );
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi;
 using SprintFlow.API.Common.Exceptions;
 using SprintFlow.Application;
 using SprintFlow.Infrastructure;
@@ -13,16 +15,43 @@ namespace SprintFlow.API
 
             // Add services
             builder.Services.AddControllers();
-
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
 
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            /* builder.Services.AddSwaggerGen()*/;
 
-            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "SprintFlow", Version = "v1" });
 
-            builder.Services.AddProblemDetails();
+                // JWT Bearer Authentication
+                options.AddSecurityDefinition(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Description = "Enter JWT token as: Bearer {token}",
+                    }
+                );
+
+                // Apply Bearer authentication to Swagger endpoints
+                options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    [
+                        new OpenApiSecuritySchemeReference(
+                            JwtBearerDefaults.AuthenticationScheme,
+                            document
+                        )
+                    ] = [],
+                });
+            });
 
             var app = builder.Build();
 

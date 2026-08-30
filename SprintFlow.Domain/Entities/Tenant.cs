@@ -16,4 +16,5 @@ public class Tenant : BaseEntity
 
     // Navigation Property
     public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
+    public ICollection<Project> Projects { get; set; } = new List<Project>();
 }

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SprintFlow.Domain.Common
+namespace SprintFlow.Application.Features.Users.Commands.UpdateUser
 {
-    internal class SoftDeleteEntity { }
+    internal class UpdateUserCommand
+    {
+    }
 }
