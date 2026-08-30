@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SprintFlow.Application.Features.TenantManagement.Command.Create;
 using SprintFlow.Application.Features.TenantManagement.Command.Delete;
+using SprintFlow.Application.Features.TenantManagement.Command.Update;
 using SprintFlow.Application.Features.TenantManagement.Queries.GetAll;
 using SprintFlow.Application.Features.TenantManagement.Queries.GetById;
 
@@ -22,7 +23,7 @@ namespace SprintFlow.API.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(
-            CreateTenantCommand command,
+            [FromBody] CreateTenantCommand command,
             CancellationToken cancellationToken
         )
         {
@@ -34,6 +35,29 @@ namespace SprintFlow.API.Controllers
             }
 
             return Created($"/api/tenants/{result.Value!.TenantId}", result);
+        }
+
+        [HttpPut("{tenantId:guid}")]
+        public async Task<IActionResult> UpdateAsync(
+            Guid tenantId,
+            [FromBody] UpdateTenantCommand command,
+            CancellationToken cancellationToken
+        )
+        {
+            // Make route ID the source of truth
+            command = command with
+            {
+                TenantId = tenantId,
+            };
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
 
         [HttpGet]
