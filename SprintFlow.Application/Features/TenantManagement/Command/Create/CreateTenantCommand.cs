@@ -1,5 +1,4 @@
-﻿using MediatR;
-using SprintFlow.Application.Common.Interfaces.CQRS;
+﻿using SprintFlow.Application.Common.Interfaces.CQRS;
 using SprintFlow.Application.Common.Models;
 
 namespace SprintFlow.Application.Features.TenantManagement.Command.Create

@@ -19,6 +19,10 @@ public class ApplicationUser : IdentityUser<Guid>
     public Guid? CreatedBy { get; set; }
 
     public Guid? UpdatedBy { get; set; }
+    public bool IsDeleted { get; set; }
+    public DateTime? DeletedAt { get; set; }
+
+    public Guid? DeletedBy { get; set; }
 
     public Tenant? Tenant { get; set; } = null!;
     public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
